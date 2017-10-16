@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  
+    <title>PolygonEntity</title>  
+    <style type="text/css">v\:*{behavior:url(#default#VML);}</style>  
+
+ <script language='javascript' type="text/javascript" src='../ajax/ajax.js' ></script>
+		<script language='javascript' type="text/javascript" src='../mapsapi/maps.js' ></script>
+
+    <script type="text/javascript" language="javascript">  
+        var map;  
+        function onLoad() {  
+        map=new PG.Map("mapDiv"); 
+		map.SetGetTileUrl(PG.MapType.google);
+        map.SetCenter(new PG.Point(116.40969,39.94940,false),10);
+		map.AddControl(new PG.MapControl()); 
+  
+        // 生成折线的点数组  
+        var points = new Array();  
+        points.push( new PG.Point( 116.29376 , 39.95776,false ) );  
+        points.push( new PG.Point( 116.42688 , 39.88608,false ) );  
+        points.push( new PG.Point( 116.41152 , 39.92640,false ) );  
+        // 根据点数组创建一条折线  
+        var polyLine = new PG.PolylineEntity( points );  
+        // 将折线添加到地图  
+        map.AddEntity( polyLine ); 
+		
+		polyLine.EnableEdit();
+
+
+		polyLine.OnChange(function(){
+			//alert('onChange');
+			//polyLine.DisableEdit();
+		});
+
+		polyLine.OnEditEnd(function(){
+			//alert('onEditEnd');
+		});
+
+	
+
+    }  
+	//document.getElementById('info').value='8888';
+    </script>  
+</head>  
+<body onload="onLoad()">  
+    <div id="mapDiv" style="width:500px; height:450px;"></div>  
+	<input id="info" style="width:500px;"/>
+</body>  
+</html> 

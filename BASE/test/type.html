@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  
+    <title>切换地图类型控件_SmartEarth Maps API 范例文档</title>  
+    <style type="text/css">v\:*{behavior:url(#default#VML);}</style>  
+   
+	 <script language='javascript' type="text/javascript" src='../ajax/ajax.js' ></script>
+	 <script language='javascript' type="text/javascript" src='../mapsapi/maps.js' ></script>
+
+    <script type="text/javascript" language="javascript">
+window.CreateMap = window.CreateMap || {};
+CreateMap.map=null;
+/** 圖層對象 */
+CreateMap.MapLayerFactory=function(url){
+	var config = {};  
+    config.Opacity = .9;   
+    lay = new PG.TileLayer(config);  
+    lay.SetGetTileUrl(CreateMap.map.GetPGMapImgUrl(
+    	url//"http://59.125.131.194/tilemap/project002/"
+    )); 
+    return lay;
+}
+CreateMap.MapLayers = {};
+/**
+ * init 加入圖層
+ */
+CreateMap.addLayers = function(){
+	//添加圖層, base底圖, subject主題圖
+	CreateMap.MapLayers.base_1=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project002/");
+	//CreateMap.MapLayers.base_1.Show();
+	//CreateMap.MapLayers.base_2=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project001/");
+	//CreateMap.MapLayers.base_2.Hide();
+	//CreateMap.MapLayers.base_3=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project002/");
+	//CreateMap.MapLayers.base_3.Hide();
+	//subject
+	//CreateMap.MapLayers.subject_1=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project001/");
+	//CreateMap.MapLayers.subject_1.Hide();
+	//CreateMap.MapLayers.subject_2=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project002/");
+	//CreateMap.MapLayers.subject_2.Hide();
+	//CreateMap.MapLayers.subject_3=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project002/");
+	//CreateMap.MapLayers.subject_3.Hide();
+	//CreateMap.MapLayers.subject_4=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project002/");
+	//CreateMap.MapLayers.subject_4.Hide();
+	//CreateMap.MapLayers.subject_5=CreateMap.MapLayerFactory("http://59.125.131.194/tilemap/2/project002/");
+	//CreateMap.MapLayers.subject_5.Hide();
+	//加入地圖
+	for( lay in CreateMap.MapLayers){
+		CreateMap.map.AddLayer(CreateMap.MapLayers[lay]);
+	}
+} 
+          
+        function onLoad() {  
+            CreateMap.map=new PG.Map("mapDiv"); 
+            CreateMap.map.SetZoomLevels([10,11,12,13,14,15,16,17,18]); 
+            CreateMap.map.SetCenter(new PG.Point(121.66962, 24.64888,false),10);  
+            CreateMap.map.AddControl(new PG.MapControl());  
+            var control1 = new PG.MapTypeControl();  
+            CreateMap.map.AddControl(control1); 
+			 CreateMap.map.AddControl(new PG.OverviewMapControl());
+			 CreateMap.map.AddControl(new PG.ScaleControl()); 
+			CreateMap.map.EnableMouseWheelZoom(true);
+CreateMap.addLayers();
+			//document.getElementById('mapDiv222').innerHTML;
+        }  
+    </script>  
+</head>  
+<body onload="onLoad()">  
+	<input type="button" value="顯示" onclick="CreateMap.MapLayers.base_1.Show();" />
+	<input type="button" value="隱藏" onclick="CreateMap.MapLayers.base_1.Hide();" />
+    <div id="mapDiv" style="width:800px; height:450px;"></div>  
+	 <div id="mapDiv222" style="width:800px; height:20px;"></div> 
+</body>  
+</html> 

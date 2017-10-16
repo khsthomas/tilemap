@@ -1,0 +1,52 @@
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">  
+    <head>  
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  
+        <title>PolygonTool</title>  
+        <style type="text/css">v\:*{behavior:url(#default#VML);}</style>  
+
+		 <script language='javascript' type="text/javascript" src='../ajax/ajax.js' ></script>
+		<script language='javascript' type="text/javascript" src='../mapsapi/maps.js' ></script>
+
+		<script type="text/javascript" language="javascript">  
+            var map,polygonTool,polygon;  
+            function onLoad() {  
+                map = new PG.Map("mapDiv");
+                map.SetCenter(new PG.Point(121.40969,23.94940,false),10);           
+                polygonTool = new PG.PolygonTool(map); 
+                PG.Event.bind(polygonTool,"OnDraw",map,onDrawRect);  
+                polygonTool.Open();  
+				var info=document.getElementById('info');
+				info.value='';
+				setInterval(function(){
+					//info.value=info.value+','+polygonTool.index;
+				},1000);
+            }  
+            function onDrawRect (lnglats)  
+            {  
+				polygon=new PG.PolygonEntity(lnglats);
+                map.AddEntity(polygon);  
+                polygonTool.Close();  
+				
+				polygon.EnableEdit();
+
+				 polygon.OnChange(function(){	
+					alert('onChange');				
+					polygon.DisableEdit();					
+				});
+
+				polygon.OnEditEnd(function(){
+					alert('onEditEnd');
+				});
+
+            }  
+
+			
+        </script>  
+    </head>  
+    <body onload="onLoad()">    
+        <div id="mapDiv" style="width:500px; height:450px;"></div>  
+		<input id="info" style='width:300px;'/>
+    </body>  
+    </html>  

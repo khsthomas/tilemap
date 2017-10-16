@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/protobuf-java.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/ant.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/args4j.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/caja-r4314.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/guava.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/jarjar.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/json.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/jsr305.jar"/>
+	<classpathentry kind="lib" path="D:/tilemap_source/se_javascriptapi3_taiwan/SRC/TOOL/lib/junit.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

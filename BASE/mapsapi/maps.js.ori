@@ -1,0 +1,211 @@
+/**
+	本文件是地圖引擎的配置文件
+	 
+	本文件定義了絕大多數全局變量
+
+*/
+function NS_CONF()
+{
+	//名字空間
+	window.PG = window.PG||{};
+	window.PG._getBaseUrl = function() {
+	    var url= location.protocol + "//" + location.hostname +
+	      (location.port && ":" + location.port) + "/";
+	      //alert(url);//
+	    return url;
+	}
+	//系統圖片路徑
+	window.PG._IMG_PATH=window.PG._getBaseUrl()+"img/maps/";//"http://59.125.131.194/img/maps/";//
+	
+	//地圖縮放級別
+	window.PG._map_zoomLevels=[1,2,3,4,5,6,7,8,9,10,11,12,13,14];
+
+	/**
+		下面幾個變量
+		_MinXResolution,_MinYResolution,_baseX,_baseY,_MaxZoomLevel,_MaxResolution
+		主要功能有二:
+		1,加載地圖圖片;
+		2,計算地圖圖片位置.
+
+		這六個變量是有關聯的,主要由切圖時所分的級別來確定值
+
+		分辨率的概念 : 指在地圖中一個像素代表的距離(米)
+	*/
+
+	/*
+		地圖最大縮放級別---和計算比例尺有關
+		
+		所切圖的最大級別,切圖的級別不同,分辨率也會不同
+
+		window.PG._MimXResolution = 0.5971642833709717;
+		window.PG._MimYResolution = 0.5971642833709717;	
+		window.PG._baseX		  = -156543.0339*128;
+		window.PG._baseY		  = -156543.0339*128;
+		window.PG._MaxZoomLevel   = 18;
+		window.PG._maxResolution  = 156543.0339;
+
+	*/
+	//級別為0時的最大解析度(公尺)(一個像素代表多少米) 156543.0339 = 0.5971642833709717*Math.pow(2,18)
+	window.PG._MaxResolution = 156543.0339;
+//自行設定級數
+	window.PG._MaxZoomLevel = 22;//約141:1, 156543.0339/Math.pow(2,22)=0.03732276771068573 
+	window.PG._map_imgSize=256;	
+	//第四象限X距離
+	window.PG._baseX = -(window.PG._MaxResolution*128);//20,037,508.3392
+	//第四象限Y距離
+	window.PG._baseY = (window.PG._MaxResolution*128);
+	
+	//屏幕X方向1px的最小解析度 (公尺)-----用於計算地圖比例尺的換算單位zoomUnit
+	window.PG._MinXResolution = window.PG._MaxResolution/Math.pow(2,window.PG._MaxZoomLevel);//0.5971642833709717;//156543.0339/2^18
+	//屏幕Y方向1px的最小解析度 (公尺)-----用於計算地圖比例尺的換算單位zoomUnit
+	window.PG._MinYResolution = window.PG._MaxResolution/Math.pow(2,window.PG._MaxZoomLevel);//0.5971642833709717;
+
+
+	//此_map_maskBackgroundURL是一張空白圖片,主要是為解決PNG格式圖片在IE6下的顯示問題而存在的
+	window.PG._map_maskBackgroundURL=window.PG._IMG_PATH+"mask.gif";
+
+	//地圖圖片加載地址
+	window.PG.NORMAL_MAPimgURLs=["http://192.168.123.22/Server/TM?LN=Asia"];//["http://59.125.131.194/tilemap/1/wm/"];//["http://59.125.131.194/tilemap/project002/"];
+	//地圖圖片版本伺服器,一般為同網域, 設為null則使用jsonp取圖, 但IE會有問題
+	window.PG.VERSION_SERVER=window.PG._getBaseUrl()+"GetVer.php";
+	//地圖瓦片加載出錯時的加載路徑
+	window.PG._ltErrorImgURL=window.PG._IMG_PATH+"mask.gif";
+
+	//地圖容器的背景圖片,白色256X256
+	window.PG._map_bgImg=window.PG._IMG_PATH+"bg.jpg";
+
+	//手型圖片路徑
+	window._map_cur = [window.PG._IMG_PATH+"openhand_8_8.cur",window.PG._IMG_PATH+"closedhand_8_8.cur"];
+	
+	
+	/*
+		設置骨頭棒控件在相應級別的提示描述
+		其中數字(例如:15)為級別,後面的字符(例如:"街道")為提示信息
+
+		當不需要這個效果時,可以將window.PG._smc_tipText設為null
+	*/
+	//window.PG._smc_tipText={15:"Street",11:"city",6:"province",2:"nation"};
+	window.PG._smc_tipText={15:"街道",11:"城市",6:"省",2:"國"};
+	/**
+		window.PG._smc_tipSize為骨頭棒控件TIP參數
+		其值含義如下:[寬度, 高度, style.left, style.top, 按鈕位置]
+		_smc_tipSize[0],_smc_tipSize[1]分別為Tip按鈕的寬度和高度
+		_smc_tipSize[2]是Tip按鈕左邊間隙(也就是style.left的值)
+		_smc_tipSize[3]為Tip按鈕上部偏移(也就是style.top的偏移值),當系統根據級別計算出來的top值有些偏差時,可以通過修改這個值進行微調
+		_smc_tipSize[4],_smc_tipSize[5]為Tip按鈕中字符的位置(也就是style.left和style.top的值)
+
+		參考PG.MapControl.prototype.initTip方法
+	*/
+	window.PG._smc_tipSize=[51,16,0,-8,6,2]; 
+
+	/*
+		當點擊骨頭棒控件的滑動條時,如果點擊處的級別和當前級別的差值小於
+		window.PG._map_slideMaxZoom,則有滑動效果,都在沒有滑動效果
+	
+	*/
+	window.PG._map_slideMaxZoom = 4;
+	
+	
+	//默認Marker圖標
+	window.PG._icon_img=window.PG._IMG_PATH+"marker.png";		
+	//默認Marker圖標大小
+	window.PG._icon_imgSize=[20,34];	
+	/*
+		默認Marker圖標錨點位置(偏移位置)
+		此位置是相對於此圖標所綁定的那個PG.MarkerEntity對像
+		
+
+		參考--PG.PointEntity.prototype.reDraw
+
+	*/
+	window.PG._icon_imgAnchor=[9,34];			
+	//默認圖標陰影
+	window.PG._icon_imgShadow=window.PG._IMG_PATH+"shadow50.png";	
+	//默認Marker圖標陰影大小	
+	window.PG._icon_imgShadowSize=[37,34];			
+	/*
+		默認Marker圖標陰影錨點位置(偏移位置)
+		此位置是相對於此圖標陰影所綁定的那個PG.Icon對像
+
+		參考--PG.IconShadow.prototype.SetAnchor
+
+	*/
+	window.PG._icon_imgShadowAnchor=[9,34];									
+	
+	//地圖logo
+	window.PG.Logo_Control_str = " &nbsp;<img style='margin-top:-5px;margin-left:-6px;background-color:transparent;background-image:url("+window.PG._IMG_PATH+"logo/logo.png);filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image,src="+window.PG._IMG_PATH+"logo/logo.png);' src='"+window.PG._IMG_PATH+"mask.gif' width='71px' height='20px'/> ";
+	
+	//信息浮框標題最大長度(為字節數),超過則截取
+	window.PG._maxTitleLength=30;
+
+	//編輯圓時,編輯點的圖標路徑
+	window.PG._circle_edt_imgPath = [window.PG._IMG_PATH+"circle.png",window.PG._IMG_PATH+"dot.png"];
+	/*
+		編輯圓時,編輯點的圖標大小和偏移
+
+		PG._circle_edt_imgSize[0] : 中心點圖標寬度和高度
+		PG._circle_edt_imgSize[1] : 中心點圖標偏移量
+		PG._circle_edt_imgSize[2] : 半徑點圖標寬度和高度
+		PG._circle_edt_imgSize[3] : 半徑點圖標偏移量
+
+	*/
+	window.PG._circle_edt_imgSize = [[12,13],[8,6],[12,12],[8,6]];
+
+	//触发双击放大地图的时间间隔,参考SE.Map.prototype.onMouseDown
+	window.PG._dbl_tapTime=300;
+	//触发双击结束绘制线面的时间间隔,参考PG.PolygonTool.prototype.onDblclick
+	window.PG._py_dbl_tapTime=500;
+					
+	//疊加物類型
+	window.PG.ENTITY_POINT = 1;			//PG.PointEntity
+	window.PG.ENTITY_POLYLINE = 2;		//PG.PloyLineEntity
+	window.PG.ENTITY_POLYGON = 3;		//PG.PolygonEntity
+	window.PG.ENTITY_MARKER = 4;		//PG.MarkEntity
+	window.PG.ENTITY_RECT = 5;			//PG.RectEntity
+	window.PG.ENTITY_ELLIPSE = 6;		//PG.EllipseEntity
+	window.PG.ENTITY_INFOWIN = 7;		//PG.EllipseEntity
+	window.PG.ENTITY_CIRCLE = 8;		//PG.CircleEntity
+	
+	//地理對像類型
+	window.PG.GEO_GEO = 0;				//GEO_GEO
+	window.PG.GEO_POINT = 1;			//GEO_POINT
+	window.PG.GEO_RECT = 2;				//GEO_RECT
+	window.PG.GEO_POLYLINE = 3;			//GEO_POLYLINE
+	window.PG.GEO_POLYGON = 4;			//GEO_POLYGON
+	window.PG.GEO_POLYGONSET = 5;		//GEO_POLYGONSET
+
+	//經緯度範圍
+	window.PG.LEGALLNGLATBOUNDS = [-18000000,18000000,-9000000,9000000];
+	  
+	document.writeln('<script language="javascript" src="../mapsapi/PG.Entity.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.WindowEntity.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.Icon.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MarkEntityTool.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.PointEntity.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.Map.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MapTile.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.Control.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.ScaleControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MapControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.HtmlElementControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.LogoControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.PolygonEntity.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.PolygonEntityTool.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.ProgressControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.OverviewMap.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.RectEntity.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.CircleEntity.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.RectEntityTool.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.CircleEntityTool.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MapTypeControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MapShadow.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.TileLayer.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MagnifyingglassControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.MapType.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.CenterCrossControl.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.EditManage.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.ContextMenu.js" type="text/javascript" charset="utf-8"></script>');
+	document.writeln('<script language="javascript" src="../mapsapi/PG.WebService.js" type="text/javascript" charset="utf-8"></script>');
+
+}
+NS_CONF();

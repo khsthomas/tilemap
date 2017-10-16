@@ -1,0 +1,84 @@
+    <!DOCTYPE>  
+    <html>  
+    <head>  
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+        <meta http-equiv="Content-Type" content="text/css; charset=UTF-8" />  
+        <meta http-equiv="Content-Type" content="text/javascript; charset=UTF-8" />  
+<title>PG API</title>
+
+<script language='javascript' type="text/javascript" src='http://api.smartearth.cn/pilotgaea/js/maps_api.js' >
+</script>
+<script language='javascript' type="text/javascript">	
+			
+		//动态加载js
+			function loadScript(url,afix){
+				var head = document.getElementsByTagName("head")[0];		
+				if(!head){head = document.documentElement;}
+				var script = document.createElement("script");  
+				script.src = url+afix+'.js';   
+				head.appendChild(script); 
+				script.onload=script.onreadystatechange=function(){  
+					var loaded=!this.readyState||this.readyState==="loaded"||this.readyState==="complete";  
+					if(loaded){}  
+				}; 
+			}  
+
+			var info=['info message'];
+			var url='http://api.smartearth.cn/pilotgaea/mobile/';//'http://127.0.0.1/mobile/';
+			var fs=['PG.CircleEntity','PG.RectEntity','PG.PolygonEntity','PG.PolygonEntityTool','PG.RectEntityTool'];
+			var webkit=PG.Tool.browserInfo().isMwk;//判断手机浏览器信息
+			if(webkit){
+				info[0]='android or iphone';
+				PG.PolygonEntity=null;
+				for(var i=0;i<fs.length;i++){
+					info.push('<br/>'+fs[i]);
+					loadScript(url+fs[i],'.Mobile');
+				}
+			}
+
+</script>
+<script language="javascript">
+	var map;
+	function onLoad()
+	{
+		map=new PG.Map("mapDiv");
+		map.SetCenter(new PG.Point(121.3933,24.86671,false),10); 
+		map.AddControl(new PG.MapControl());	
+		map.AddControl(new PG.OverviewMapControl());	
+		map.AddControl(new PG.ScaleControl());		
+		map.AddControl(new PG.CenterCrossControl());
+		map.AddControl(new PG.MapTypeControl());
+		map.EnableMouseWheelZoom(true);
+				
+		var points1 = new Array();  
+		points1.push(new PG.Point(120.8933,24.96671,false) );  
+		points1.push(new PG.Point(121.2933,24.36671,false) );  
+		points1.push(new PG.Point(120.2933,24.66671,false) ); 
+
+		var polygon = new PG.PolygonEntity(points1);  
+		map.AddEntity(polygon);
+
+		polygon.EnableEdit();
+		//���ñ༭���С
+		polygon.SetNodeSize(new PG.Size(50,50));
+	
+		var tool=new PG.PolygonTool(map,{LineColor:'red'});
+		tool.Open();
+		
+		PG.Event.addListener(tool,"OnDraw", function(points){
+			tool.Close();
+			map.AddEntity(new PG.PolygonEntity(points));
+			
+			
+		});
+
+	}	
+	
+</script>
+</head>
+<body onload="onLoad()">
+<div id="mapDiv" style="overflow:hidden; width:100%; height:90%; z-index:0;">loading...</div>
+	
+</body>
+</html>
+

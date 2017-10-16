@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>椭圆工具_SmartEarth Maps API 示例文档</title>
+	<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+	<script language='javascript' type="text/javascript" src='http://api.smartearth.cn/pilotgaea/js/maps_api.js' ></script>
+<script language='javascript' type="text/javascript">	
+			
+		//动态加载js
+			function loadScript(url,afix){
+				var head = document.getElementsByTagName("head")[0];		
+				if(!head){head = document.documentElement;}
+				var script = document.createElement("script");  
+				script.src = url+afix+'.js';   
+				head.appendChild(script);  
+			}  
+
+			var info=['info message'];
+			var url='http://api.smartearth.cn/pilotgaea/mobile/';//'http://127.0.0.1/mobile/';
+			var fs=['PG.CircleEntity','PG.RectEntity','PG.PolygonEntity','PG.PolygonEntityTool','PG.RectEntityTool'];
+			var webkit=PG.Tool.browserInfo().isMwk;//判断手机浏览器信息
+			if(webkit){
+				info[0]='android or iphone';
+				PG.PolygonEntity=null;
+				for(var i=0;i<fs.length;i++){
+					info.push('<br/>'+fs[i]);
+					loadScript(url+fs[i],'.Mobile');
+				}
+			}
+
+</script>
+<script type="text/javascript" language="javascript">
+		var map,ellipseTool,ellipse; 
+		
+		/**
+  		* 页面初始化
+  		*/ 
+        function onLoad() {  
+            map = new PG.Map("mapDiv");  
+            map.SetCenter(new PG.Point(121.40969,23.89945,false),8);           
+            ellipseTool = new PG.EllipseTool(map);  
+            PG.Event.bind(ellipseTool,"OnDraw",map,onDrawEllipse);  
+            ellipseTool.Open();              
+        }  
+        
+        /**
+  		* 绘制椭圆
+  		*/
+        function onDrawEllipse(bounds,rect)  
+        {  
+			ellipse=new PG.EllipseEntity(bounds);
+            map.AddEntity(ellipse);  
+            ellipseTool.Close();  
+            PG.Event.addListener(ellipse,'OnEditEnd',function(){
+				alert('onEditEnd');
+			});
+        }
+        
+        /**
+  		* 启动编辑椭圆
+  		*/
+  		function edit()
+  		{
+  			if(ellipse==null)
+        	{
+        		alert('请先画椭圆再进行编辑！');
+        		return;
+        	}
+        	else
+        	{
+        		ellipse.EnableEdit();	        		
+        	}
+  		}
+	</script>
+</head>
+<body onload="onLoad()">
+	<button onclick="edit();">编　辑</button>
+	<div id="mapDiv" style="width:500px; height:450px;"></div>
+</body>
+</html>

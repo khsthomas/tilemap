@@ -1,0 +1,1 @@
+java -jar -Xms128m -Xmx1024m pgMapComp.jar

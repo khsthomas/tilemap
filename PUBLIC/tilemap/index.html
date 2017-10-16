@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>多目標地籍圖資系統平台</title>
+	<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+	<link type="text/css" rel="stylesheet" href="/css/menu_nav.css" />
+	
+	<script language="javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/menu_nav.js"></script>
+	<script language="javascript" src="/js/maps_api.js"></script>
+	<script language="javascript" src="/mobile/map.mobile.js"></script>
+	
+	
+<script language="javascript">
+	var map;
+	function onLoad() {  
+            map=new PG.Map("mapDiv");  
+            map.SetCenter(new PG.Point(121.3933,24.86671,false),7);  
+            map.AddControl(new PG.MapControl());  
+            var control1 = new PG.MapTypeControl();  
+            map.AddControl(control1); 
+			 map.AddControl(new PG.OverviewMapControl());
+			 map.AddControl(new PG.ScaleControl()); 
+			map.EnableMouseWheelZoom(true);
+
+			//document.getElementById('mapDiv222').innerHTML;
+       }
+       
+   //$(document).ready(onLoad()); 
+   var oldOnload = window.onload || function() {};
+   window.onload = function() {
+   	oldOnload();
+   	onLoad();
+   }	
+</script>	
+</head>
+<body>
+
+	<!--<span class="preload1"></span>
+	<span class="preload2"></span>-->
+
+	<ul id="nav" class="menu_nav">
+		<li class="top"><a href="#" class="top_link"><span class="down">檔案</span></a>
+			<ul class="sub">
+				<li><a href="http://jquery.com">載入</a></li>
+				<li><a href="http://jqueryui.com">匯出向量</a></li>
+				<li><a href="http://jquerymobile.com">匯出向量</a></li>
+				<li class="seperator"><a href="http://jquerymobile.com">列印</a></li>
+			</ul>
+		</li>
+		<li class="top"><a href="#" class="top_link"><span class="down">定位</span></a>
+			<ul class="sub">
+				<li><a href="http://jquery.com">地號定位</a></li>
+				<li><a href="http://jqueryui.com">地標定位</a></li>
+				<li><a href="http://jquerymobile.com">路口定位</a></li>
+				<li><a>門牌定位</a></li>
+				<li><a href="http://jquerymobile.com">座標定位</a></li>
+			</ul>
+		</li>
+		<li class="top"><a href="#" class="top_link"><span class="down">查詢</span> </a>
+			<ul class="sub">
+				<li><a href="http://jquery.com" >地籍資料(圖面點擊)</a></li>
+				<li><a href="http://jqueryui.com">地籍資料(地號)</a></li>
+				<li><a href="http://jquerymobile.com">地籍資料(門牌)</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">地籍謄本(圖面點擊)</a></li>
+				<li><a href="http://jquerymobile.com">地籍謄本(地號)</a></li>
+				<li><a href="http://jquerymobile.com">地籍謄本(門牌)</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">地籍異動索引</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">地籍異動清冊</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">地價區段圖</a></li>
+				<li><a href="http://jquerymobile.com">都巿計畫圖</a></li>				
+			</ul>
+		</li>
+		<li class="top"><a href="#" class="top_link"><span class="down">宗地摘錄</span></a>
+			<ul class="sub">
+				<li><a href="http://jquery.com">使用DWG/DXF範圍摘錄</a></li>
+				<li><a href="http://jqueryui.com">使用SHP範圍摘錄</a></li>
+				<li><a href="http://jquerymobile.com">圖面自訂範圍摘錄</a></li>
+				<li><a>點選地籍圖範圍摘錄</a></li>
+				<li><a href="http://jquerymobile.com">選取地標範圍摘錄</a></li>
+				<li><a href="http://jquerymobile.com">使用段地號文字檔範圍摘錄</a></li>
+			</ul>
+		</li>
+		<li class="top"><a href="#" class="top_link"><span class="down">工具</span></a>
+			<ul class="sub">
+				<li><a href="http://jquery.com">清除標示</a></li>
+				<li><a href="http://jqueryui.com">鎖點</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">歷史查詢紀錄區</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">測量任意長度</a></li>
+				<li><a href="http://jquerymobile.com">測量垂距</a></li>
+				<li><a href="http://jquerymobile.com">測量任意面積</a></li>
+				
+				<li class="seperator"><a href="http://jquerymobile.com">一般設定</a></li>
+				<li><a href="http://jquerymobile.com">圖層設定</a></li>				
+			</ul>
+		</li>
+		<li class="top"><a href="#" class="top_link"><span class="down">地價作業</span></a>
+			<ul class="sub">
+				<li>
+					<a href="#" class="fly">地價查詢</a>
+					<ul>
+						<li><a href="http://jqueryui.com">擬評公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公共設施擬評公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公共設施公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公告地價涱幅</a></li>
+						<li><a href="http://jqueryui.com">公共設施公告地價涱幅</a></li>
+					</ul>					
+				</li>
+				<li class="mid">
+					<a href="#" class="fly">地價顏色</a>
+					<ul>
+						<li><a href="http://jqueryui.com">擬評公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公共設施擬評公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公共設施公告現值涱跌幅</a></li>
+						<li><a href="http://jqueryui.com">公告地價涱幅</a></li>
+						<li><a href="http://jqueryui.com">公共設施公告地價涱幅</a></li>
+					</ul>					
+				</li>				
+			</ul>
+		</li>
+		<li class="top"><a href="#" class="top_link"><span class="down">管理</span></a>
+			<ul class="sub">
+				<li><a href="#" onclick="">使用者</a></li>
+				<li><a href="http://jqueryui.com">群組</a></li>
+				<li><a href="http://jquerymobile.com">登入管制</a></li>
+				<li><a href="http://jquerymobile.com">日誌查詢</a></li>
+				<li><a href="http://jquerymobile.com">公佈欄</a></li>				
+			</ul>
+		</li>
+	</ul>
+	
+<!--<div id="mapDiv" style="overflow:hidden; width:100%; height:90%; z-index:0;">loading...</div>-->
+<div id="mapDiv" style="width:800px; height:450px;"></div>  
+	 <div id="mapDiv222" style="width:800px; height:20px;"></div> 
+</body>
+</html>
+

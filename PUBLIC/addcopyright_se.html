@@ -1,0 +1,25 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<title>版权控件_SmartEarth Maps API 示例</title>
+		<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+		<script type="text/javascript" language="javascript" src="http://f.smartearth.cn:9000/SE_JSAPI?uid=smartearth"></script>
+		<script type="text/javascript" language="javascript">
+			var map,control;
+			function onLoad() {
+				map=new SE.Map("mapDiv");
+				map.setCenter(new SE.LngLat(116.36976,39.92974),11);
+				control=new SE.CopyrightControl();
+				control.addCopyright({id:1,content:"<a href=\"www.smartearth.cn\" target=\"_blank\" style=\"font-size:14;color:red\">我的地图</a>",bounds:new SE.LngLatBounds([new SE.LngLat(10,30),new SE.LngLat(160,70)])});
+				control.setLeft(10);
+				control.setTop(10);
+				map.addControl(control);
+			}
+		</script>
+	</head>
+	<body onload="onLoad()">
+		<div id="mapDiv" style="width:500px; height:450px;"></div>
+	</body>
+	</html>

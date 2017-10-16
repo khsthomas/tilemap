@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  
+    <title>折线的增加_SmartEarth Maps API 范例文档</title>  
+    <style type="text/css">v\:*{behavior:url(#default#VML);}</style>  
+<script language="javascript" src="../ajax/ajax.js"></script>
+   <script language="javascript" src="../mapsapi/maps.js"></script>
+
+    <script type="text/javascript" language="javascript">  
+        var map;  
+        function onLoad() {  
+        map=new PG.Map("mapDiv");  
+        map.SetCenter(new PG.Point(121.3933,24.86671,false),8);
+		map.AddControl(new PG.MapControl()); 
+  
+       var marker = new PG.MarkEntity(new PG.Point(121.3933,24.86671,false));   
+           map.AddEntity(marker);   
+       var infoWin=marker.OpenWindowHtml("您的内容");   
+      infoWin.SetTitle("您的标题");   
+      infoWin.title_ctx3.style.marginTop='-2px';   
+
+    }  
+    </script>  
+</head>  
+<body onload="onLoad()">  
+    <div id="mapDiv" style="width:500px; height:450px;"></div>  
+	<input id="info"/>
+</body>  
+</html> 

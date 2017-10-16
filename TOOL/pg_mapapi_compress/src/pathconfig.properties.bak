@@ -1,0 +1,31 @@
+
+#CODE VERSION
+PG_CODE_VERSION=3.5
+
+#CODE CONFUSION DEVICE VERSION
+PG_OV_VERSION=1.0
+
+#BASE PATH
+PG_BASE_PATH=D\:\\tilemap_source\\se_javascriptapi3_taiwan\\SRC\\
+
+# Configuration path
+PG_CONF_PATH=CONFIG\\
+PG_CONF_PATH_NAMES=maps_config.js
+
+# AJAX path
+PG_AJAX_PATH=BASE\\ajax\\
+PG_AJAX_PATH_NAMES=PG.BrowserInfo.js,PG.Tool.js,PG.ObjectLoader.js,PG.Ajax.js,PG.Event.js,PG.Geo.js,PG.Point.js,PG.Rect.js,PG.Polygon.js,PG.Polyline.js,PG.PolygonSet.js,PG.Size.js
+
+#MAPS API path
+PG_MAPS_PATH=BASE\\mapsapi\\
+PG_MAPS_PATH_NAMES=PG.Control.js,PG.CenterCrossControl.js,PG.LogoControl.js,PG.ContextMenu.js,PG.HtmlElementControl.js,PG.ProgressControl.js,PG.MapControl.js,PG.ScaleControl.js,PG.MagnifyingglassControl.js,PG.Overlay.js,PG.Icon.js,PG.PointOverlay.js,PG.Rect.js,PG.Polygon.js,PG.Circle.js,PG.InfoWindow.js,PG.EditManage.js,PG.MarkTool.js,PG.RectTool.js,PG.PolygonTool.js,PG.CircleTool.js,PG.Map.js,PG.MapShadow.js,PG.MapTile.js,PG.TileLayer.js,PG.MapType.js,PG.MapTypeControl.js,PG.OverviewMap.js
+PG_WEB_SERVICE_PATH_NAMES=PG.WebService.js
+
+#MAPS API AJAX NAMES
+PG_AJAXGroup=Event,ObjectLoader,Ajax,Tool,BrowserInfo,Geo,Point,Rect,Polyline,PolygonSet,Polygon,Size
+
+#MAPS API MAPS NAMES
+PG_MapsGroup=Icon,DivIcon,Entity,WindowEntity,PointEntity,MarkEntity,PolyLineEntity,PolygonEntity,RectEntity,EllipseEntity,CircleEntity,Control,ScaleControl,HtmlElementControl,LogoControl,MapControl,ZoomInTool,ProgressControl,RectTool,EllipseTool,CircleTool,MarkTool,PolyLineTool,PolygonTool,MapTile,MapTileMgr,OverviewMapControl,OverviewMap,MapEffect,BseiDigControl,Layer256Overlay,MapTypeControl,TileLayer,MapShadow,IconShadow,MagnifyingglassControl,MapType,CenterCrossControl,EdittingMPolyLine,WindowEntityTab,ContextMenu,MenuItem,CopyrightControl,Map
+
+#MAPS API path
+PG_SAVE_PATH=D\:\\tilemap_source\\se_javascriptapi3_taiwan\\SRC\\PUBLIC\\js\\maps_api.js

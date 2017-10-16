@@ -1,0 +1,147 @@
+    <!DOCTYPE>  
+    <html>  
+    <head>  
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+        <meta http-equiv="Content-Type" content="text/css; charset=UTF-8" />  
+        <meta http-equiv="Content-Type" content="text/javascript; charset=UTF-8" />  
+<title>PG API</title>
+
+<script language="javascript" src="js/maps_api.js"></script>
+<script language='javascript' type="text/javascript">	
+			function loadScript(url){
+				var head = document.getElementsByTagName("head")[0];		
+				if(!head){head = document.documentElement;}
+				var script = document.createElement("script");  
+				script.src = url;   
+				head.appendChild(script);  
+				script.onload=script.onreadystatechange=function(){  
+					var loaded=!this.readyState||this.readyState==="loaded"||this.readyState==="complete";  
+					if(loaded){}  
+				};  
+			}  
+			//引入mobile
+			var info=['9999'];
+			var url='mobile/';
+			var fs=['PG.CircleEntity.Mobile.js','PG.RectEntity.Mobile.js',
+			'PG.PolygonEntity.Mobile.js',
+			'PG.RectEntityTool.Mobile.js','PG.PolygonEntityTool.Mobile.js'];
+			var webkit=PG.Tool.browserInfo().isMwk;
+			if(webkit){
+				info[0]='android or iphone';
+				PG.PolygonEntity=null;
+				for(var i=0;i<fs.length;i++){
+					info.push('<br/>'+fs[i]);
+					loadScript(url+fs[i]);
+				}
+			}
+
+		</script>
+<script language="javascript">
+	var map;
+	function onLoad()
+	{
+		map=new PG.Map("mapDiv");
+		map.SetCenter(new PG.Point(121.3933,24.86671,false),10); 
+		map.AddControl(new PG.MapControl());	
+		map.AddControl(new PG.OverviewMapControl());	
+		map.AddControl(new PG.ScaleControl());
+		
+		
+		map.AddControl(new PG.CenterCrossControl());
+		map.AddControl(new PG.MapTypeControl());
+		map.EnableMouseWheelZoom(true);
+		
+		var marker=new PG.MarkEntity(new PG.Point(121.3933,24.86671,false));
+		map.AddEntity(marker);
+		//marker.OpenWindowHtml(99999);
+		//marker.EnableEdit();
+		
+
+
+		 var p=new PG.PointEntity(map.GetCenter());
+		 p.SetText(info.join(''));
+		// map.AddEntity(p);
+
+		
+		// return;
+						
+		circle = new PG.CircleEntity(map.GetCenter(),30000);
+		//map.AddEntity(circle); 
+
+		var bounds=new PG.Rect(121.2933,24.96671,121.4933,24.56671,false); 		
+
+		var ellipset = new PG.EllipseEntity(bounds,'red','',5); 
+		//map.AddEntity(ellipset);
+			
+		var Rect = new PG.RectEntity(bounds.Clone()); 
+		//map.AddEntity(Rect);
+			
+					
+		var points = new Array();  
+		points.push(new PG.Point(120.8933,24.96671,false) );  
+		points.push(new PG.Point(121.1933,23.56671,false) );  
+		points.push(new PG.Point(121.6933,24.36671,false) );  
+		
+		
+
+		var points1 = new Array();  
+		points1.push(new PG.Point(120.8933,24.96671,false) );  
+		//points1.push(new PG.Point(121.1933,24.56671,false) );  
+		points1.push(new PG.Point(121.2933,24.36671,false) );  
+		points1.push(new PG.Point(120.2933,24.66671,false) );  
+
+		// ��ݵ����鴴��һ������  
+		var polyLine = new PG.PolylineEntity(points1);  
+		//map.AddEntity(polyLine);
+
+
+		var polygon = new PG.PolygonEntity(points1);  
+		map.AddEntity(polygon);
+
+		var edit = polygon;
+		edit.EnableEdit();
+
+		setTimeout(function(){
+		
+			polygon.SetNodeSize(new PG.Size(50,50));
+
+		},1000);
+		//polygon.SetNodeSize(new PG.Size(50,50));
+
+		//PG.Event.addListener(polygon,"OnClick", function() {
+				//var myHtml = 9999;
+				//alert(99999);
+				
+		//});		
+		
+
+		var mtool=new PG.MarkTool(map);
+		//mtool.Open();
+		PG.Event.addListener(mtool,"OnMouseUp", function(b){
+			map.AddEntity(new PG.MarkEntity(b));
+			mtool.Open();
+			//alert(55);
+		});
+
+
+
+		var tool=new PG.PolygonTool(map,{LineColor:'red'});
+		tool.Open();
+		
+		PG.Event.addListener(tool,"OnDraw", function(points){
+			tool.Close();
+			map.AddEntity(new PG.PolygonEntity(points));
+			
+			
+		});
+
+	}	
+	
+</script>
+</head>
+<body onload="onLoad()">
+<div id="mapDiv" style="overflow:hidden; width:100%; height:90%; z-index:0;">loading...</div>
+	
+</body>
+</html>
+

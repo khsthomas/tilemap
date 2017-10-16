@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>画圆工具_SmartEarth Maps API 示例文档</title>
+	<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+	 <script language='javascript' type="text/javascript" src='../ajax/ajax.js' ></script>
+		<script language='javascript' type="text/javascript" src='../mapsapi/maps.js' ></script>
+
+<script language='javascript' type="text/javascript">	
+			
+		//动态加载js
+			function loadScript(url,afix){
+				var head = document.getElementsByTagName("head")[0];		
+				if(!head){head = document.documentElement;}
+				var script = document.createElement("script");  
+				script.src = url+afix+'.js';   
+				head.appendChild(script);  
+			}  
+
+			var info=['info message'];
+			var url='http://api.smartearth.cn/pilotgaea/mobile/';//'http://127.0.0.1/mobile/';
+			var fs=['PG.CircleEntity','PG.RectEntity','PG.PolygonEntity','PG.PolygonEntityTool','PG.RectEntityTool'];
+			var webkit=PG.Tool.browserInfo().isMwk;//判断手机浏览器信息
+			var OnDraw="OnDrawEnd";
+			if(webkit){
+				info[0]='android or iphone';
+				OnDraw="OnDraw";
+				PG.PolygonEntity=null;
+				for(var i=0;i<fs.length;i++){
+					info.push('<br/>'+fs[i]);
+					loadScript(url+fs[i],'.Mobile');
+				}
+			}
+
+</script>
+<script type="text/javascript" language="javascript">
+		var map,circleTool,circle;  
+        function onLoad() {  
+            map = new PG.Map("mapDiv");  
+            map.SetCenter(new PG.Point(121.40969,23.89945,false),8);           
+            circleTool = new PG.CircleTool(map);  
+            PG.Event.bind(circleTool,"OnDraw",map,onDrawCircle);  
+			PG.Event.addListener(circleTool,"OnEditEnd",function(center,radius){	
+				//var center = c.GetCenter();
+				//var radius = c.GetRadius();
+				circle = new PG.CircleEntity(center,radius);
+				map.AddEntity(circle);			
+				circleTool.Close();		
+				PG.Event.addListener(circle,'OnEditEnd',function(){					
+					this.DisableEdit();//endEdit();
+					document.getElementById('info').value="圆的半径是 "+parseInt(this.radius)+" 米";
+					alert('OnEditEnd');
+				});			
+			});
+            circleTool.Open();   
+        }  
+        
+        /**
+    	* 编辑多边形
+    	*/ 
+        function onDrawCircle(center,radius)  
+        {  
+			document.getElementById('info').value="圆的半径是 "+parseInt(radius)+" 米";					
+        } 
+        
+        /**
+    	* 启动编辑圆
+    	*/ 
+    	function edit(){
+    		if(!circle){
+        		alert('请先画圆再进行编辑！');
+        		return;
+        	}else{
+        		circle.EnableEdit();
+        	}
+    	}
+	</script>
+</head>
+<body onload="onLoad()">
+	<button onclick="edit();">编　辑</button>
+	<div id="mapDiv" style="width:100%; height:450px;"></div>
+	<input type="text" id="info" style="width:500px;"/>
+</body>
+</html>

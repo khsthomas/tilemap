@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>版权控件_SmartEarth Maps API 示例</title>
+	<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+	<script type="text/javascript" language="javascript" src="http://api.smartearth.cn/pilotgaea/maps_api.js"></script>
+	<script type="text/javascript" language="javascript">
+		var map,control;
+		function onLoad() {
+			map=new PG.Map("mapDiv");
+			map.SetCenter(new PG.Point(121.36976,23.92974,false),11);
+			control=new PG.CopyrightControl();
+			control.AddCopyright({id:1,content:"<a href=\"www.smartearth.cn\" target=\"_blank\" style=\"font-size:14;color:red\">我的地图</a>",bounds:new PG.Rect(80,50,160,5,false)});
+			control.SetLeft(10);
+			control.SetTop(10);
+			map.AddControl(control);
+		}
+	</script>
+</head>
+<body onload="onLoad()">
+	<div id="mapDiv" style="width:500px; height:450px;"></div>
+</body>
+</html>

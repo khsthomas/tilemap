@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  
+    <title>明湟測試webservice</title>  
+    <style type="text/css">v\:*{behavior:url(#default#VML);}</style>  
+<!--<script language="javascript" src="../ajax/ajax.js"></script>
+   <script language="javascript" src="../mapsapi/maps.js"></script>-->
+<script language="javascript" src="js/maps_api.js"></script>
+<script language="javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" language="javascript">  
+        /*
+	 * AP 物件  放webservice 呼叫的函式等二開所需的工具物件
+	 */
+    function AP(){};
+    AP.config={};
+    AP.config.WS_Url="http://127.0.0.1:1023/jsonpdocommand?func={serviceName}";//設定建立PG.Webservice的URL,同webserver就不用設定,否則就照設定的
+    /*
+     * 以下擴充webservice的方法
+     */
+    //取得webservice的url
+	AP.getBaseUrl = function() {
+	    var url= location.protocol + "//" + location.hostname +
+	      (location.port && ":" + location.port) + "/";
+	      //alert(url);//
+	    return url;
+	}
+    AP.BaseUrl = AP.getBaseUrl();
+    //window._wscall_return_val;
+    //丟給webserver 呼叫userdefined傳回
+    var _Po = true;//post or get
+    AP._WebService = new PG.WebService((AP.config.WS_Url)?AP.config.WS_Url:AP.BaseUrl + 'webservice.ashx?func={serviceName}', _Po, 'params', 'wsret', 'JsonCallback');
+    AP.ServiceUrl= function(serviceName){return this._WebService._ws_url.replace("{serviceName}",serviceName);}
+    //傳回wscall,可用async=false拿回來
+    AP.ServiceCall = function(funcName, jsonObj, async) {
+    	//alert(funcName);
+    	//var ret=null;
+    	//alert(AP.ServiceUrl(funcName));
+    	window['_wscall_return_val']=null;
+    	jsonObj.webservice={"type":"string","value":"yes"};//給userdefined用
+    	if((typeof async == 'undefined'))async=true;//預設非同步
+        AP._WebService.WSCall(funcName, jsonObj, '_wscall_return_val',async);
+        return window['_wscall_return_val'];
+        /*
+        var check = setInterval(function () {
+            if (window['_wscall_return_val']) {
+                clearInterval(check);
+                //ret= window['_wscall_return_val'];
+                //alert(window[data_test[id-1][1]]);
+                alert('return data : ' + PG.JSON.stringify(window['_wscall_return_val']));
+            }
+        }, 100);
+        */
+        //while(ret != null)
+        //return window['_wscall_return_val'];
+    }
+    /*
+     * AP.ServiceCallback的缺點是,callback必須定義在windows(全域)底下可以叫到的地方
+     */
+    AP.ServiceCallback = function(funcName, jsonObj, callback, async) {
+    	jsonObj.webservice={"type":"string","value":"yes"};//給userdefined判斷是否為webservice用
+    	if((typeof async == 'undefined'))async=true;//預設非同步
+        AP._WebService.WSCallback(funcName, jsonObj, callback, async);
+    }
+    //直接用juery ajax post&get
+    /*
+     * @param userdefinedName 服務名稱
+     * @param parameters 參數(json型式)
+     * @param ajaxCallback 回呼函式
+     * @param usePost 是否post
+     */
+    AP.AjaxRequest = function(userdefinedName,parameters,ajaxCallback,usePost) {
+    	 var url = AP.ServiceUrl(userdefinedName);//AP.BaseUrl + 'webservice.ashx?func='+userdefinedName;
+    	 parameters.webservice={"type":"string","value":"yes"};//給userdefined用
+		 var pms ={};
+		 //字串化json
+		 pms[AP._WebService._paramsName]=PG.JSON.stringify(parameters);
+		 //這個參數值可以隨意設定
+		 pms[AP._WebService._returnVarName]=AP._WebService._returnVarName;
+		 //{"params":PG.JSON.stringify(settings._parameters),'wsret':'ret'}
+		 if((typeof usePost == 'undefined'))usePost=true;
+		if (usePost == true)
+		{
+			$.post( url, pms, ajaxCallback );
+		} else	{
+			$.get( url, pms, ajaxCallback );
+		}
+    }
+    window.AP = AP;
+    /* @class: ServiceType
+     * @desc:設定Webservice 型態格式函數
+     */
+    ServiceType={};
+    ServiceType.isArray = function(obj) {
+	     // do an instanceof check first
+	     if (obj instanceof Array) {
+	         return true;
+	     }
+	     // then check for obvious falses
+	     if (typeof obj !== 'object') {
+	         return false;
+	     }
+	     if (ServiceType.jstype(obj) === 'array') {
+	         return true;
+	     }
+	     return false;
+	 };
+	 ServiceType.jstype = function(obj) {
+		    if (obj === null || typeof obj === 'undefined') {
+		        return String (obj);
+		    }
+		    return Object.prototype.toString.call(obj)
+		        .replace(/\[object ([a-zA-Z]+)\]/, '$1').toLowerCase();
+		};
+    ServiceType.string=function(val){
+    	return {"type":"string","value":val};
+    }
+    ServiceType.bool=function(val){
+    	return {"type":"bool","value":(val)?"true":"false"};
+    }
+    ServiceType.int=function(val){
+    	return {"type":"int","value":val};
+    }
+    ServiceType.double=function(val){
+    	return {"type":"double","value":val};
+    }
+    ServiceType.rect=function(val){
+    	var x;
+    	if((typeof val.left != 'undefined')){
+    		x={'type':'rect','left':val.left,'right':val.right,'top':val.top,'bottom':val.bottom};
+    	}else{ 
+    		if((typeof val.L != 'undefined')){
+	    		x={'type':'rect','left':val.L,'right':val.R,'top':val.T,'bottom':val.B};
+	    	}else{
+	    		x={'type':'rect','left':val[0],'right':val[1],'top':val[2],'bottom':val[3]};
+	    	}
+    	}
+    	return x;
+    }
+    ServiceType.point=function(val){
+    	var x;
+    	if((typeof val.x != 'undefined')){
+    	 	x={'type':'point','x':val.x,'y':val.y};
+    	}else{
+    		x={'type':'point','x':val[0],'y':val[1]};	
+    	}
+    	return x;
+    }
+    ServiceType.line=function(val){
+    	var x;
+    	//val from to is point
+    	if((typeof val.from != 'undefined')){
+    		if((typeof val.from.type != 'undefined')){
+    	 		x={'type':'line','from':val.from,'to':val.to};
+    	 	}else{
+    	 		x={'type':'line','from':ServiceType.point(val.from),'to':ServiceType.point(val.to)};
+    	 	}
+    	}else{
+    	  	x= {'type':'line','from':ServiceType.point(val[0]),'to':ServiceType.point(val[1])};
+    	}
+    	return x;
+    }
+    ServiceType.polyline=function(val){
+    	var x=[];
+    	if(ServiceType.isArray(val) && val.length>0){
+	    	if((typeof val[0].type != 'undefined')){
+	    		x=val;
+	    	}else{
+	    		for(var i=0; i<val.length; i++){
+				  x.push(ServiceType.point(val[i]));
+				};
+	    	}
+    	}
+    	//val is point array
+    	return {'type':'polyline','buf':x};
+    }
+    ServiceType.polygon=function(val){
+    	var x=[];
+    	if(ServiceType.isArray(val) && val.length>0){
+	    	if((typeof val[0].type != 'undefined')){
+	    		x=val;
+	    	}else{
+	    		for(var i=0; i<val.length; i++){
+				  x.push(ServiceType.point(val[i]));
+				};
+	    	}
+    	}
+    	//val is point array
+    	return {'type':'polygon','buf':x};
+    }
+    //一定要先處理
+    ServiceType.polygonset=function(val){
+    	//bound hole is polygon array
+    	var x;
+    	//val from to is point
+    	if((typeof val.bound != 'undefined')){
+    	 	x={'type':'polygonset','bound':val.bound,'hole':val.hole};
+    	}else{
+    		x={'type':'polygonset','bound':val[0],'hole':val[1]};
+    	}
+    	return x;
+    }
+    //for array
+    ServiceType.array_string=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.string(val[i]));
+		};
+    	return {'type':'array_string','buf':x};
+    }
+    ServiceType.array_bool=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.bool(val[i]));
+		};
+    	return {'type':'array_bool','buf':x};
+    }
+    ServiceType.array_int=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.int(val[i]));
+		};
+    	return {'type':'array_int','buf':x};
+    }
+    ServiceType.array_double=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.double(val[i]));
+		};
+    	return {'type':'array_double','buf':x};
+    }
+    ServiceType.array_rect=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.rect(val[i]));
+		};
+    	return {'type':'array_rect','buf':x};
+    }
+    ServiceType.array_point=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.point(val[i]));
+		};
+    	return {'type':'array_point','buf':x};
+    }
+    ServiceType.array_line=function(val){
+    	var x=[];
+    	for(var i=0; i<val.length; i++){
+		  x.push(ServiceType.line(val[i]));
+		};
+    	return {'type':'array_line','buf':x};
+    }
+    ServiceType.array_polyline=function(val){
+    	return {'type':'array_polyline','buf':val};
+    }
+    ServiceType.array_polygon=function(val){
+    	return {'type':'array_polygon','buf':val};
+    }
+    ServiceType.array_polygonset=function(val){
+    	return {'type':'array_polygonset','buf':val};
+    }
+    window.ServiceType = ServiceType;
+    window.ST = ServiceType;
+    
+    function cb_test(data){
+    	data = eval(data);
+    	//window.wsret={'FinalMessage':{'type':'string','value':''}}
+    	document.getElementById('ajaxRes').innerHTML=JSON.stringify(data);
+    }
+    </script>  
+</head>  
+<body>  
+	<input id="info" type="button" value="test"
+	onclick="AP.AjaxRequest.call(this,'TestJsonErr2',{'sectcode':{'type':'string','value':'0300宜蘭段乾門小段'},'towncode':{'type':'string','value':'G01宜蘭市'}},cb_test,true);"/>
+	<div id="ajaxRes"> </div>
+</body>  
+</html> 

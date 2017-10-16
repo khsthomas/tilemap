@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">  
+<head>  
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />  
+    <title>切換地圖類型控件_SmartEarth Maps API 範例文檔</title>  
+    <style type="text/css">v\:*{behavior:url(#default#VML);}</style>  
+   
+	 <script language="javascript" src="/js/maps_api.js"></script>
+<script language="javascript" src="/mobile/map.mobile.js"></script>
+
+    <script type="text/javascript" language="javascript">  
+        var map;  
+        function onLoad() {  
+            map=new PG.Map("mapDiv");  
+            map.SetCenter(new PG.Point(121.3933,24.86671,false),6);  
+            map.AddControl(new PG.MapControl());  
+            var control1 = new PG.MapTypeControl();  
+            map.AddControl(control1); 
+			 map.AddControl(new PG.OverviewMapControl());
+			 map.AddControl(new PG.ScaleControl()); 
+			map.EnableMouseWheelZoom(true);
+
+			//document.getElementById('mapDiv222').innerHTML;
+        }  
+    </script>  
+</head>  
+<body onload="onLoad()">  
+    <div id="mapDiv" style="width:800px; height:450px;"></div>  
+	 <div id="mapDiv222" style="width:800px; height:20px;"></div> 
+</body>  
+</html> 

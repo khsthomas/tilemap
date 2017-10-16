@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>创建右键菜单_SmartEarth Maps API 范例文档</title>
+	<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+	<script language="javascript" src="http://api.smartearth.cn/pilotgaea/js/maps_api.js"></script>
+<script language='javascript' type="text/javascript">	
+			//动态加载js
+			function loadScript(url,afix){
+				var head = document.getElementsByTagName("head")[0];		
+				if(!head){head = document.documentElement;}
+				var script = document.createElement("script");  
+				script.src = url+afix+'.js';   
+				head.appendChild(script);  
+			}  
+
+			var info=['info message'];
+			var url='http://api.smartearth.cn/pilotgaea/mobile/';//'http://127.0.0.1/mobile/';
+			var fs=['PG.CircleEntity','PG.RectEntity','PG.PolygonEntity','PG.PolygonEntityTool','PG.RectEntityTool'];
+			var webkit=PG.Tool.browserInfo().isMwk;//判断手机浏览器信息
+			if(webkit){
+				info[0]='android or iphone';
+				PG.PolygonEntity=null;
+				for(var i=0;i<fs.length;i++){
+					info.push('<br/>'+fs[i]);
+					loadScript(url+fs[i],'.Mobile');
+				}
+			}
+
+</script><script type="text/javascript" language="javascript">
+	 	var map;
+	    function onLoad() {
+		    map=new PG.Map("mapDiv");
+		    map.SetCenter(new PG.Point(121.40969,23.94940,false),11);
+		    map.AddControl(new PG.MapControl());
+			var menu  = new PG.ContextMenu();
+			menu.AddItem(new PG.MenuItem("放大",function (){map.ZoomIn()}));
+			 menu.AddSeparator();
+			menu.AddItem(new PG.MenuItem("缩小",function(){map.ZoomOut()}));
+			map.AddContextMenu(menu);
+	    }
+	</script>
+</head>
+<body onload="onLoad()">
+	<div id="mapDiv" style="width:500px; height:450px;"></div>
+</body>
+</html>

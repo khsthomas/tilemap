@@ -1,0 +1,335 @@
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+		<title>叠加一个图层_SmartEarth Maps API 范例文档</title>
+		<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+		<script language='javascript' type="text/javascript" src='../ajax/ajax.js' ></script>
+		<script language='javascript' type="text/javascript" src='../mapsapi/maps.js' ></script>
+		<script type="text/javascript" language="javascript">
+/**
+	map :		地图对象
+	control :	缩放控件  
+*/
+var map,control;
+
+/**
+	加载函数
+*/
+function onLoad()
+{	
+	map = new PG.Map("mapDiv");
+	map.SetCenter(new PG.Point(121.40969,23.94940,false),10);
+	control = new PG.MapControl(); 
+	map.AddControl(control);
+	map.SetMapType(window.PG.NORMAL_MAP);
+	//map.RemoveMapType(window.PG.NORMAL_MAP)
+
+	
+	var switchControl = new PG.MapTypeControl();	
+	var option = {};		
+	option.minResolution = 1;
+	option.minResolution = 12;
+
+	//地形图
+	//var dixing_url = "http://virelief.smartearth.cn/";
+	//var dixing_get_url = getMapImagesUrl(dixing_url,".jpg");
+	//var dixingLayer = createLayer(option,dixing_get_url,dixing_url,".jpg",false);	
+	//var hybridLayer = createLayer(option,PG.MapType.hybrid,window.PG.Blend_imgURLS,".png",true);
+	//window.PG.Dixing_MAP = new PG.MapType([dixingLayer,hybridLayer],"地形图");
+	//window.PG.Dixing_MAP.getTileSize = function(){ return 256; };
+
+	//google
+	var google_url = "http://mt1.google.cn/vt/lyrs=m@174000000&hl=zh-CN&gl=cn&src=app&s=Ga";
+	var google_get_url=function(x,y,z){return google_url+"&x="+x+"&y="+y+"&z="+z;};
+	var googleLayer = createLayer(option,google_get_url,google_url,".jpg",false);
+	window.PG.Google_MAP = new PG.MapType([googleLayer],"Google");
+	window.PG.Google_MAP.getTileSize = function(){ return 256; };
+	
+	//pg 舊編碼
+	var pg_url = "http://59.125.131.194/tilemap/1/wm1/";
+	var pg_get_url=getpgtile(pg_url,".png");
+	var pgLayer = createLayer(option,pg_get_url,pg_url,".png",true);
+	window.PG.PG_MAP = new PG.MapType([pgLayer],"Pilotgaea");
+	window.PG.PG_MAP.getTileSize = function(){ return 256; };
+	
+	//pg 新編碼
+	var pg_url2 = "http://59.125.131.194/tilemap/1/b1/";
+	var pg_get_url2=getpgtile2(pg_url2,".png");
+	var pgLayer2 = createLayer(option,pg_get_url2,pg_url2,".png",true);
+	window.PG.PG_MAP2 = new PG.MapType([pgLayer2],"Pilotgaea2");
+	window.PG.PG_MAP2.getTileSize = function(){ return 256; };
+	
+	//pg 宗 賢
+	//http://192.168.123.218/Server/TM?C=VER&LN=Asia
+	//http://192.168.123.218/Server/TM?C=MAP&LN=Asia&ID=xxxxxxxx
+	var pg_url3 = "http://192.168.123.220/Server/TM?LN=Asia&C=MAP&ID=";//&C=MAP&ID=
+	var pg_get_url3=getpgtile3(pg_url3,".png");
+	var pgLayer3 = createLayer(option,pg_get_url3,pg_url3,".png",true);
+	window.PG.PG_MAP3 = new PG.MapType([pgLayer3],"Pilotgaea3");
+	window.PG.PG_MAP3.getTileSize = function(){ return 256; };
+	
+	var pg_url4 = "http://192.168.123.220/Server/TM?LN=Asia";//&C=MAP&ID=
+	option.isPng = true;
+	var pgLayer4 = new PG.TileLayer(option);
+	map.SetMapImagesFunc(pg_url4,pgLayer4,function(){
+		pgLayer4.GetImgUrl = function(){ return pg_url4;};
+	    pgLayer4.GetExtName = function(){ return ".png";};	
+	});
+	window.PG.PG_MAP4 = new PG.MapType([pgLayer4],"Pilotgaea4");
+	window.PG.PG_MAP4.getTileSize = function(){ return 256; };
+	//var pgLayer3 = createLayer(option,pg_get_url3,pg_url3,".png",true);
+	//添加地图类型
+	//map.AddMapType(PG.Dixing_MAP);
+	//map.AddMapType(PG.Google_MAP);
+	map.AddMapType(PG.PG_MAP);
+	map.AddMapType(PG.PG_MAP2);
+	map.AddMapType(PG.PG_MAP3);
+	map.AddMapType(PG.PG_MAP4);
+
+	map.AddControl(switchControl);
+	switchControl.SetRight(7);
+
+	//切換Maptype應做的處厘
+	//PG.Event.addListener(map,"OnChangeMaptype",onMapTypeChange);
+
+	map.EnableKeyboardPilot();
+	map.EnableMouseWheelZoom(true);
+}
+
+/**
+	创建图层
+
+	option :		图层属性(定义最大和最小的级别)
+	getTileUrl :	地图瓦片的获取处理函数
+	url :			地图瓦片地址
+	ext :			地图瓦片扩展名
+	isPng :			地图瓦片是否为png格式图片
+
+*/
+function createLayer(option,getTileUrl,url,ext,isPng){
+	option.isPng = isPng;
+	var layer = new PG.TileLayer(option);
+	layer.SetGetTileUrl(getTileUrl);
+	//設定介面function
+	layer.GetImgUrl = function(){ return url;};
+	layer.GetExtName = function(){ return ext;};
+	return layer;
+}
+function createLayer2(option,map,url,ext,layer){
+	//layer.SetGetTileUrl(getTileUrl);
+	map.SetMapImagesFunc(url,layer,function(){
+		layer.GetImgUrl = function(){ return url;};
+	    layer.GetExtName = function(){ return ext;};
+	});
+	//設定介面function
+}
+
+/**
+	地图类型切换处理
+
+	这个函数主要是处理缩放控件,因为不同地图类型的级别可能不一样
+
+*/
+function onMapTypeChange(mapType) {
+	if(PG.Dixing_MAP==mapType){
+		map.setZoomLevels([1,2,3,4,5,6,7]);
+		if(map.getCurrentZoom()>7){ map.zoomTo(7);}
+	}else{
+		map.setZoomLevels([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]);
+	}
+	control.resetLength();
+}
+
+/**
+	设置获取地图瓦片的处理函数
+	
+	   url : 瓦片地址
+	   ext : 瓦片扩展名 
+
+*/
+function getMapImagesUrl(url,ext)
+{
+	return function(bx,by,zoom){
+		methodConfig = 8;
+		zoom+=8-methodConfig; 
+		var nGrade=Math.ceil((zoom-3)/4);
+		var nPreRow=0,nPreCol=0,nPreSize=0;  
+		var path="";
+		for(var i=0;i<nGrade;i++)
+		{
+			var nSize=1<<(4*(nGrade-i));
+			var nRow =parseInt((bx-nPreRow*nPreSize)/nSize);
+			var nCol =parseInt((by-nPreCol*nPreSize)/nSize);
+			path+=((nRow>9)?nRow:"0"+nRow)+""+((nCol>9)?nCol:"0"+nCol)+"/";
+			nPreRow = nRow;
+			nPreCol = nCol;
+			nPreSize = nSize;
+		}
+		var imgURLs=[url];
+	    var id=(((bx)&((1<<20)-1))+(((by)&((1<<20)-1))*Math.pow(2,20))+(((zoom)&((1<<8)-1))*Math.pow(2,40)));
+		return imgURLs[Math.abs(bx+by)%imgURLs.length]+zoom+"/"+path+id+ext;
+	}
+} 
+//wm
+function getpgtile2(url,ext)
+{
+	return function(bx,by,z)
+	{
+		//var url = 'http://59.125.131.194/tilemap/2/2/';
+		//alert(b)
+	    var e = handleLL(by,7);
+		var f = custEncode2(z+'\0'+by+'\0'+bx,bx);
+		return url + 'level' + (z>9?z:"0"+z) + '/row' + e + '/' + f + ext;//'.png';	
+	}	
+};
+//wm1
+function getpgtile(url,ext)
+{
+	return function(bx,by,z)
+	{
+		//var url = 'http://59.125.131.194/tilemap/2/2/';
+		//alert(b)
+	    var e = handleLL(by,7);
+		var f = custEncode(z+'\0'+by+'\0'+bx);
+		return url + 'level' + (z>9?z:"0"+z) + '/row' + e + '/' + f + ext;//'.png';	
+	}	
+};
+function handleLL(a,b){
+	var e = a.toString();//.substring(0,a.toString().indexOf('.'));
+	var l = b - e.length;
+	var c = [];
+	for(var i=0;i<l;i++){c.push('0');}
+	return c.join('') + e;
+};
+//以下是檔名加密演算
+var chTable="EjksF12YIJKLMlm3XnOopqrZabu67TVvwfghPQRitxUcSNdeyz0GH89+_AB45WCD-";
+function custEncode(rawstr,flag)
+{
+   str=toHex(rawstr);
+   var i;
+   var b = [0,0,0];
+   var cba;       
+   var encStr = ""; 
+   var len;
+   cba = splitToArray(str);
+   for (len=0; ; ) {
+      b[0] = b[1] = b[2] = 0;
+      //取3個一組
+      for (i=0; i<3 && cba.length>0; i++)
+         b[i] = cba.shift();//移出第一個ele
+      if (i==0) break;//做完了
+      //0x3f == 111111
+      encStr += chTable.charAt((b[0] >>> 2) & 0x3f).toString();//b[0] >>> 2 去除右邊2bit
+      encStr += chTable.charAt((b[0] << 4 | b[1] >>> 4) & 0x3f).toString();//b[0]左移4bit | b[1]去除右4bit
+      encStr += i>1 ? chTable.charAt((b[1] << 2 | b[2] >>> 6) & 0x3f).toString() : '-';//b[0]左移2bit | b[1]去除右6bit
+      encStr += i>2 ? chTable.charAt(b[2] & 0x3f).toString() : '-';
+      len += 4;//8*3=6*4
+      if (flag && len%76==0) encStr += "\r\n";//加上跳行
+   }
+   return encStr;
+}
+//var chTable=["q_a7z4w1sx","e852dcrf-v","rfv+t963gb","u0=jmikolp"];
+cTable=["q_a7z4w1sx",
+  	"e852dcrf-v",
+ 	"rfv+t963gb",
+ 	"u0=jmikolp"];
+function custEncode2(rawstr,x)
+{
+   str=toHex(rawstr);
+   var i;
+   var uct = cTable[x%4];         
+   var encStr = ""; 
+   //var tc;
+   for (i=0; i<str.length; i++){        
+      //0x3f == 111111
+      //tc = str.charAt(i);
+      encStr += uct.charAt(parseInt(str.charAt(i),10));
+   }
+   return encStr;
+}
+function splitToArray(str)
+{
+   var i;
+   var cba = [];  // character code byte array
+   var ch;        // single character
+   for (i=0; i<str.length; i++) {
+     ch = str.charCodeAt(i);
+     if (ch > 0x007f) {
+        ch = parseInt(encodeURI(str.charAt(i)).replace(/%/g,''),16);
+        if (ch > 0x07ff) cba.push((ch >>> 16) & 0xff);
+        cba.push((ch >>> 8) & 0xff);
+     }
+     cba.push(ch & 0xff); 
+   }
+   return cba;
+}
+function toHex(str) {
+	    var hex = '';
+	    var a;
+	    for(var i=0;i<str.length;i++) {
+	    	a=str.charCodeAt(i).toString(16);
+	    	if(a.length<2)a="0"+a;
+	        hex += ''+a;
+	    }
+	    return hex;
+} 
+//宗賢code
+//wm
+function getpgtile3(url,ext)
+{
+	return function(bx,by,z)
+	{
+		
+		return url + Encode(1, z, by, bx);//'.png';	
+	}	
+};
+var g_EncodeTable = 
+[
+	["3","6","7","8","5","4","9","1","0","2"],
+	["8","4","6","1","2","5","7","0","9","3"],
+	["9","2","8","3","1","7","4","5","6","0"],
+	["5","1","2","6","3","9","0","7","8","4"],
+	["7","0","5","2","8","3","6","1","4","9"]
+];
+
+var	g_OffsetTable = [3, 7, 9];
+
+function FillZero(num, len)
+{
+    var s = num.toString();
+    var count = len - s.length;
+    var buffer = [];
+    for (var i = 0; i < count; i++)
+    {
+        buffer.push('0');
+    }
+    return buffer.join('') + s;
+}
+
+function Encode(Version, Zoom, Row, Col)
+{
+    var r = Col % 5;
+    var base = Row % 10;
+    var oi = Zoom % 3;
+    var offset = g_OffsetTable[oi];
+    
+    var content = FillZero(Version, 2) + FillZero(Zoom, 2) + FillZero(Col, 7) + FillZero(Row, 7);
+    var code = "";
+	for (var i = 0; i < 18; i++)
+	{
+	    code += g_EncodeTable[r][(base + i * offset + (content.charCodeAt(i) - 48)) % 10];
+	}
+
+    var count = r * 30 + base * 3 + oi;
+    var key = String.fromCharCode(count / 26 + 65, count % 26 + 65);
+    
+	return key + code;
+} 
+		</script>
+	</head>
+	<body onload="onLoad()">
+		<div id="mapDiv" style="width:500px; height:450px;"></div>
+	</body>
+	</html>

@@ -1,0 +1,66 @@
+
+D:\tilemap_source\se_javascriptapi3_taiwan\SRC\TOOL>java -jar -Xms128m -Xmx1024m pgMapComp.jar 
+**************Start to Handle!****************
+**************Start to Read config info!****************
+user.dir = D:\tilemap_source\se_javascriptapi3_taiwan\SRC\TOOL
+file.getAbsolutePath = D:\tilemap_source\se_javascriptapi3_taiwan\SRC\TOOL\pathconfig.properties
+Map API Objects needed to handle is:
+PG_AJAXGroup : Event,Tool,BrowserInfo,Geo,Point,Rect,Polyline,PolygonSet,Polygon,Size
+PG_MapsGroup : Icon,DivIcon,Entity,WindowEntity,PointEntity,MarkEntity,PolylineEntity,PolygonEntity,RectEntity,EllipseEntity,CircleEntity,Control,ScaleControl,HtmlElementControl,LogoControl,MapControl,ZoomInTool,ProgressControl,RectTool,EllipseTool,CircleTool,MarkTool,PolyLineTool,PolygonTool,MapTile,MapTileMgr,OverviewMapControl,OverviewMap,MapEffect,BseiDigControl,Layer256Overlay,MapTypeControl,TileLayer,MapShadow,IconShadow,MagnifyingglassControl,MapType,CenterCrossControl,EdittingMPolyLine,WindowEntityTab,ContextMenu,MenuItem,CopyrightControl,Map
+**************Read config info Over!****************
+**************Start to Merger all JS files!****************
+
+配置文件....
+文件路?  D:\tilemap_source\se_javascriptapi3_taiwan\SRC\CONFIG\
+正在?理的文件是  maps_config.js
+
+AJAX文件....
+文件路?  D:\tilemap_source\se_javascriptapi3_taiwan\SRC\BASE\ajax\
+正在?理的文件是  PG.BrowserInfo.js
+正在?理的文件是  PG.Tool.js
+正在?理的文件是  PG.Event.js
+正在?理的文件是  PG.Geo.js
+正在?理的文件是  PG.Point.js
+正在?理的文件是  PG.Rect.js
+正在?理的文件是  PG.Polygon.js
+正在?理的文件是  PG.Polyline.js
+正在?理的文件是  PG.PolygonSet.js
+正在?理的文件是  PG.Size.js
+
+API文件....
+文件路?  D:\tilemap_source\se_javascriptapi3_taiwan\SRC\BASE\mapsapi\
+正在?理的文件是  PG.Control.js
+正在?理的文件是  PG.CenterCrossControl.js
+正在?理的文件是  PG.LogoControl.js
+正在?理的文件是  PG.ContextMenu.js
+正在?理的文件是  PG.HtmlElementControl.js
+正在?理的文件是  PG.ProgressControl.js
+正在?理的文件是  PG.MapControl.js
+正在?理的文件是  PG.ScaleControl.js
+正在?理的文件是  PG.MagnifyingglassControl.js
+正在?理的文件是  PG.Entity.js
+正在?理的文件是  PG.Icon.js
+正在?理的文件是  PG.PointEntity.js
+正在?理的文件是  PG.RectEntity.js
+正在?理的文件是  PG.PolygonEntity.js
+正在?理的文件是  PG.CircleEntity.js
+正在?理的文件是  PG.WindowEntity.js
+正在?理的文件是  PG.EditManage.js
+正在?理的文件是  PG.MarkEntityTool.js
+正在?理的文件是  PG.RectEntityTool.js
+正在?理的文件是  PG.PolygonEntityTool.js
+正在?理的文件是  PG.CircleEntityTool.js
+正在?理的文件是  PG.Map.js
+正在?理的文件是  PG.MapShadow.js
+正在?理的文件是  PG.MapTile.js
+正在?理的文件是  PG.TileLayer.js
+正在?理的文件是  PG.MapType.js
+正在?理的文件是  PG.MapTypeControl.js
+正在?理的文件是  PG.OverviewMap.js
+正在合并....  
+**************Merger all JS files Over!****************
+**************Start to Compress first!****************
+**************Compress first Over!****************
+**************Start to Compress second!****************
+**************Compress second Over!****************
+**************Handle Over!****************

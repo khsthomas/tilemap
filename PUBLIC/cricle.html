@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<title>圆的增加_SmartEarth Maps API 范例文档</title>
+	<style type="text/css">v\:*{behavior:url(#default#VML);}</style>
+	<script type="text/javascript" language="javascript" src="http://api.smartearth.cn/web/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="http://api.smartearth.cn/web/js/iColorPicker.js"></script>
+	<script type="text/javascript" language="javascript" src="js/maps_api.js"></script>
+	<script type="text/javascript" language="javascript">
+	 	var map,circle;
+	    function onLoad() {
+		    map=new PG.Map("mapDiv");
+		    map.SetCenter(new PG.Point(121.35969,23.92000,false),11);
+		    map.AddControl(new PG.MapControl());
+
+		    // 定义该矩形的显示区域
+		   circle = new PG.CircleEntity(map.GetCenter(),5000); 
+		   circle.SetLineColor(document.getElementById("mycolor2").value);
+		   circle.SetFillColor(document.getElementById("mycolor1").value);
+		   circle.SetLineStroke(1);
+		   map.AddEntity(circle);
+	    }
+		function setColor()
+		{
+		   circle.SetLineColor(document.getElementById("mycolor2").value);
+		   circle.SetFillColor(document.getElementById("mycolor1").value);
+		   var linewidth = document.getElementById("lineWidth").value;
+		   if(parseInt(linewidth))
+		   {
+		   	 	circle.SetLineStroke(parseInt(linewidth));
+		   }else{
+		   		alert("线宽参数不合法");
+		   }
+		}
+	</script>
+</head>
+<body onload="onLoad()">
+	背景色：<input readonly="true" id="mycolor1" name="mycolor" type="text" value="#ffcc00" class="iColorPicker" style="width:60px"/>
+边框色：<input readonly="true" id="mycolor2" name="mycolor" type="text" value="#ed008c" class="iColorPicker" style="width:60px"/>
+边框宽度：<input type="text" id="lineWidth" style="width:60px" value="1"/><input type="button" value="确定" onclick="setColor()" style="margin-left:5px"/>
+	<div id="mapDiv" style="width:500px; height:450px;"></div>
+</body>
+</html>
